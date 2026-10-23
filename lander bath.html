@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bathroom Offers Check</title>
+<meta name="robots" content="noindex, nofollow">
+<style>
+  /* ====== CONFIGURACIÓN: pon aquí el link de tu oferta ====== */
+  /* (se edita más abajo, en el <script>) */
+
+  :root {
+    --bg: #f4f5f7;
+    --card: #ffffff;
+    --ink: #1f2d44;
+    --muted: #5b6678;
+    --line: #e6e8ec;
+    --green: #2e9b34;
+    --green-dark: #247a29;
+    --red: #e03b2e;
+    --red-dark: #b92f24;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .card {
+    background: var(--card);
+    width: 100%;
+    max-width: 640px;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(31, 45, 68, .08);
+    padding: 44px 36px 36px;
+    text-align: center;
+    border-top: 5px solid var(--green);
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    background: #f0f2f5;
+    padding: 6px 12px;
+    border-radius: 999px;
+    margin-bottom: 22px;
+  }
+  .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--green);
+    animation: blink 1.6s infinite;
+  }
+  h1 {
+    font-size: clamp(26px, 6vw, 40px);
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: -.01em;
+    margin-bottom: 30px;
+  }
+  .question {
+    font-size: clamp(22px, 5vw, 32px);
+    font-weight: 400;
+    margin-bottom: 26px;
+  }
+  .buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  .btn {
+    display: block;
+    border: 0;
+    border-radius: 8px;
+    padding: 22px 10px;
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform .12s ease, background .15s ease;
+    box-shadow: 0 3px 0 rgba(0,0,0,.15);
+  }
+  .btn:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,.15); }
+  .yes { background: var(--green); animation: pulse 2s infinite; }
+  .yes:hover { background: var(--green-dark); }
+  .no { background: var(--red); }
+  .no:hover { background: var(--red-dark); }
+  .foot {
+    margin-top: 28px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .msg { display: none; font-size: 18px; color: var(--muted); margin-top: 6px; }
+
+  @keyframes pulse {
+    0%   { box-shadow: 0 3px 0 rgba(0,0,0,.15), 0 0 0 0 rgba(46,155,52,.45); }
+    70%  { box-shadow: 0 3px 0 rgba(0,0,0,.15), 0 0 0 14px rgba(46,155,52,0); }
+    100% { box-shadow: 0 3px 0 rgba(0,0,0,.15), 0 0 0 0 rgba(46,155,52,0); }
+  }
+  @keyframes blink { 50% { opacity: .35; } }
+
+  @media (max-width: 420px) {
+    .card { padding: 34px 20px 26px; }
+    .buttons { gap: 12px; }
+    .btn { padding: 20px 8px; font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+  <main class="card">
+    <div class="badge"><span class="dot"></span>Free eligibility check &middot; takes 30 seconds</div>
+
+    <h1>US Homeowners Might Qualify For Bathroom Offers</h1>
+
+    <div id="step">
+      <p class="question">Are You A US Resident?</p>
+      <div class="buttons">
+        <a class="btn yes" id="yesBtn" href="#">YES</a>
+        <a class="btn no" id="noBtn" href="#">NO</a>
+      </div>
+    </div>
+
+    <p class="msg" id="noMsg">Sorry, this offer is only available to US residents.</p>
+
+    <p class="foot">No obligation. Checking takes less than a minute.</p>
+  </main>
+
+<script>
+  // ================= CONFIGURACIÓN =================
+  // 1) Pega aquí el link de afiliado de tu oferta:
+  var OFFER_URL = "https://TU-LINK-DE-OFERTA.com";
+
+  // 2) ¿Qué pasa al apretar NO?
+  //    "" (vacío) = muestra un mensaje "Sorry, only US residents"
+  //    o pon un link para enviarlos a otra oferta.
+  var NO_URL = "";
+  // =================================================
+
+  // Pasa los parámetros del anuncio (subid, clickid, utm...) al link de la oferta
+  function withParams(url) {
+    var qs = window.location.search;
+    if (!qs) return url;
+    return url + (url.indexOf("?") === -1 ? "?" : "&") + qs.slice(1);
+  }
+
+  document.getElementById("yesBtn").href = withParams(OFFER_URL);
+
+  var noBtn = document.getElementById("noBtn");
+  if (NO_URL) {
+    noBtn.href = withParams(NO_URL);
+  } else {
+    noBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      document.getElementById("step").style.display = "none";
+      document.getElementById("noMsg").style.display = "block";
+    });
+  }
+</script>
+</body>
+</html>
